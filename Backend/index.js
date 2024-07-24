@@ -6,10 +6,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 
 app.use(cors({
-    origin: 'http://localhost:3000', // React app URL
+    origin: ['http://localhost:3000', 'http://192.168.29.184:3000'],// React app URL
     credentials: true, // Allow cookies to be sent
 }));
 app.use(cookieParser());
@@ -21,25 +22,25 @@ const MongoStore = require('connect-mongo');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(session({
-    name: 'guruschool',
-    secret:'guruschool',
-    saveUninitialized: false,
-    resave: false,
-    cookie:{
-        maxAge: (1000*60*100),
-        path: '/students/new-student'
-    },
-    store: MongoStore.create(
-        {
-            mongoUrl: env.dbPath,
-            autoRemove: 'disabled'
-        },
-        function(err){
-            console.log(err || 'connect-mongo setup ok');
-        }
-    )
-}));
+// app.use(session({
+//     name: 'guruschool',
+//     secret:'guruschool',
+//     saveUninitialized: false,
+//     resave: false,
+//     cookie:{
+//         maxAge: (1000*60*100),
+//         path: '/students/new-student'
+//     },
+//     store: MongoStore.create(
+//         {
+//             mongoUrl: env.dbPath,
+//             autoRemove: 'disabled'
+//         },
+//         function(err){
+//             console.log(err || 'connect-mongo setup ok');
+//         }
+//     )
+// }));
 
 app.use('/',require('./Routers/index'));
 

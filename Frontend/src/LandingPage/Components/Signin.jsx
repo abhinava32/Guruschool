@@ -1,6 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import UserContext from '../../Context/userContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -15,6 +17,18 @@ function Signin({ setLoginButton }) {
   const [emailError, setEmailError] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const UserInfo = useContext(UserContext);
+
+
+  const notify = () => {
+     if(UserInfo.loggedUser){
+      console.log("Logged in successfully");
+        toast("Logged in successfully");
+     }
+        
+  }
+  useEffect(() => {
+    notify();
+  }, [UserInfo.loggedUser])
 
   const handleEmailChange = (e) => {
     const inputEmail = e.target.value;
@@ -64,7 +78,7 @@ function Signin({ setLoginButton }) {
 
     try{
     
-      await axiosInstance.post('http://localhost:8000/students/login',student, setTimeout(2000)).then(
+      await axiosInstance.post('http://localhost:8000/login',student, setTimeout(2000)).then(
         response => {
           handleResponse(response);
         }
@@ -76,6 +90,8 @@ function Signin({ setLoginButton }) {
   };
 
   return (
+    <>
+    <ToastContainer />
     <div className="fixed inset-0 flex items-center justify-center">
       <div className="fixed inset-0 bg-black opacity-50"></div>
       <div className="bg-white p-8 rounded-lg shadow-md max-w-md z-10">
@@ -101,6 +117,7 @@ function Signin({ setLoginButton }) {
         <button onClick={() => setLoginButton("none")} className="mt-4 text-sm text-gray-600 hover:text-gray-800 focus:outline-none">Close</button>
       </div>
     </div>
+    </>
   );
 }
 
